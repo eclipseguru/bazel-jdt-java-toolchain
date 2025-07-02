@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,11 +48,11 @@ import org.eclipse.jdt.internal.compiler.CompilationResult;
 import org.eclipse.jdt.internal.compiler.ICompilerRequestor;
 import org.eclipse.jdt.internal.compiler.batch.ClasspathLocation;
 import org.eclipse.jdt.internal.compiler.batch.FileSystem;
-import org.eclipse.jdt.internal.compiler.batch.FileSystem.Classpath;
-import org.eclipse.jdt.internal.compiler.batch.FileSystem.ClasspathAnswer;
 import org.eclipse.jdt.internal.compiler.batch.Main;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
+import org.eclipse.jdt.internal.compiler.env.IBinaryType;
 import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
+import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.compiler.problem.ProblemSeverities;
 
@@ -170,7 +171,7 @@ public class BlazeEcjMain {
 			// we use this to collect information about all used dependencies during
 			// compilation
 			FileSystem nameEnvironment = super.getLibraryAccess();
-			nameEnvironment.nameEnvironmentListener = this::recordNameEnvironmentAnswer;
+			nameEnvironment.setNameEnvironmentAnswerListener(this::recordNameEnvironmentAnswer);
 			return nameEnvironment;
 		}
 
@@ -214,18 +215,13 @@ public class BlazeEcjMain {
 			processingModule.recordUnit(builder.build());
 		}
 
-		protected void recordNameEnvironmentAnswer(ClasspathAnswer classpathAnswer) {
-			Classpath classpath = classpathAnswer.source;
-			if (classpath instanceof ClasspathLocation) {
-				String jar = ((ClasspathLocation) classpath).getPath();
+		protected void recordNameEnvironmentAnswer(NameEnvironmentAnswer answer) {
+			IBinaryType binaryType = answer.getBinaryType();
+			if (binaryType != null) {
+				String jar = extractBinaryTypeJarPath(binaryType);
 				if (jar != null && jar.endsWith(".jar")) {
 					Path jarPath = Path.of(jar);
 					if (processedJars.add(jarPath)) {
-						// we assume jars come from the execroot; JDT uses absolute/canonical paths
-						// therefore we translate the path back into an execroot relative path for Bazel
-						// to be happy
-						jarPath = sandboxPathPrefix.relativize(jarPath);
-
 						// update the dependency proto
 						if (usedDependencyCollectionMode != UsedDependencyCollectionMode.None) {
 							if (directJars.contains(jarPath)) {
@@ -637,6 +633,37 @@ public class BlazeEcjMain {
 		}
 	}
 
+	/**
+	 * Extract the jar file path from a binary type URI. The URI of a binary type is generally in this format:
+	 * <pre>
+	 * jar:file://<path to jar>.jar!<path to class>
+	 * </pre>
+	 * We only use URIs that start with "jar:file:///" and containing ".jar!", e.g.:
+	 * <pre>
+	 * jar:file:///.../header_junit-jupiter-api-5.13.3.jar!/org/junit/jupiter/api/Test.class
+	 * </pre>
+	 * The URI format is coming from {@link  org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader}, in particular see:
+	 * <ul>
+	 * <li>{@link org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader#read(ZipFile, String, boolean)}</li>
+	 * <li>{@link org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader#toUri(String)}</li>
+	 * </ul>
+	 * 
+	 * @param binaryType a jar path is extracted from the URI of this binary type
+	 * @return the path of the binary types jar or {@code null} if the URI didn't match the expected format
+	 */
+	private static String extractBinaryTypeJarPath(IBinaryType binaryType) {
+		URI binaryTypeUri = binaryType.getURI();
+		String uri= binaryTypeUri.toString();
+		String prefix = "jar:file:///";
+		String suffix = ".jar!";
+		int index = uri.indexOf(".jar!");
+		String jar = null;
+		if (uri.startsWith(prefix) && index != -1) {
+			jar = uri.substring(prefix.length(), index + suffix.length() - 1);
+		}
+		return jar;
+	}
+	
 	private BlazeEcjMain() {
 	}
 }
