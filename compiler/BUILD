@@ -1,4 +1,5 @@
 load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_jvm_external//:defs.bzl", "java_plugin_artifact")
 
 # Bazel's Worker
 java_library(
@@ -6,9 +7,9 @@ java_library(
     srcs = glob(["src/main/worker/**/*.java"]),
     deps = [
         "//compiler/src/main/protobuf:worker_protocol_java_proto",
-        "@com_google_protobuf//:protobuf_java",
-        "@com_google_protobuf//:protobuf_java_util",
-        "@rules_jdt_guava",
+        "@protobuf//:protobuf_java",
+        "@protobuf//:protobuf_java_util",
+        "@maven//:com_google_guava_guava",
     ],
 )
 
@@ -33,11 +34,11 @@ java_library(
     ],
     visibility = ["//:__subpackages__"],
     runtime_deps = [
-        "@rules_jdt_org_ow2_asm_asm",
-        "@rules_jdt_org_ow2_asm_asm_analysis",
-        "@rules_jdt_org_ow2_asm_asm_commons",
-        "@rules_jdt_org_ow2_asm_asm_tree",
-        "@rules_jdt_org_ow2_asm_asm_util",
+        "@maven//:org_ow2_asm_asm",
+        "@maven//:org_ow2_asm_asm_analysis",
+        "@maven//:org_ow2_asm_asm_commons",
+        "@maven//:org_ow2_asm_asm_tree",
+        "@maven//:org_ow2_asm_asm_util",
     ],
     deps = [
         ":bazel_org_jacoco_core",
@@ -46,11 +47,14 @@ java_library(
         "//compiler/src/main/protobuf:deps_java_proto",
         "//compiler/src/main/protobuf:java_compilation_java_proto",
         "//compiler/src/main/protobuf:worker_protocol_java_proto",
-        "//compiler/third_party/auto_value:processor",
-        "@com_google_protobuf//:protobuf_java",
-        "@rules_jdt_caffeine",
-        "@rules_jdt_guava",
-        "@rules_jdt_jsr305",
+        "@protobuf//:protobuf_java",
+        "@maven//:com_google_auto_value_auto_value_annotations",
+        "@maven//:com_github_ben_manes_caffeine_caffeine",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_code_findbugs_jsr305",
+    ],
+    plugins = [
+        java_plugin_artifact("com.google.auto.value:auto-value", "com.google.auto.value.processor.AutoValueProcessor"),
     ],
 )
 
