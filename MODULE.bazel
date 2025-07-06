@@ -83,7 +83,7 @@ bazel_dep(name = "rules_pkg", version = "1.1.0", dev_dependency = True)
 git_override(
     module_name = "rules_pkg",
     # git_override to consume parts of https://github.com/bazelbuild/rules_pkg/pull/967
-    commit = "7b0dfc482b254a20b94d2a5786a26fe133ae3514",
+    commit = "ca7dca8c6c6ae89301bd7706e38bbdaff54b5603",
     remote = "https://github.com/guw/rules_pkg.git",
 )
 
@@ -92,7 +92,6 @@ find_git = use_extension("@rules_pkg//toolchains/git:git_configure.bzl", "experi
 use_repo(find_git, "rules_pkg_git")
 
 register_toolchains(
-    "@rules_pkg_git//:git_auto_toolchain",
-    "@rules_pkg//toolchains/git:git_missing_toolchain",
+    "@rules_pkg_git//:all",
     dev_dependency = True,
 )

@@ -406,7 +406,7 @@
     },
     "@@rules_pkg+//toolchains/git:git_configure.bzl%experimental_find_system_git_extension": {
       "general": {
-        "bzlTransitiveDigest": "CXvQEYM2mTGt1sez1M36XU0zShWzBD13V5ug/YYe5/o=",
+        "bzlTransitiveDigest": "e0kcURgANfZOn09j27ioW3sdqfsXxZFsBMLJCF1cE2Y=",
         "usagesDigest": "HKfa/9gu0OgnhUCq6Fj9vM+nn2a18EFGOgEMaA3Njro=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
