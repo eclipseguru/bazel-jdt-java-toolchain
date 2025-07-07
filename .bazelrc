@@ -1,5 +1,5 @@
 # JDK 17
-common --java_language_version=17
+build --java_language_version=17
 
 # use a custom toolchain to produce 17 output with 21 api
 build --extra_toolchains=//:java17_toolchain_with_javax21api_definition
