@@ -41,4 +41,3 @@ java_junit5_test(
         artifact("org.junit.platform:junit-platform-reporting"),
     ],
 )
-
