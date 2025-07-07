@@ -58,22 +58,17 @@ use_repo(maven, "maven")
 #
 # Get the matching bazel jacoco jars from https://github.com/bazelbuild/bazel/tree/master/third_party/java/jacoco
 #
-http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+jvm_import_external = use_repo_rule("@bazel_tools//tools/build_defs/repo:jvm.bzl", "jvm_import_external")
 
-http_archive(
-    name = "bazel_org_jacoco_core_jar",
-    downloaded_file_path = "org.jacoco.core.jar",
-    sha256 = "fcd188c688473fc8dcc0c6caaf355e7b389502243527c33b9597a3ec28791f47",
-    urls = [
+jvm_import_external(
+    name = "bazel_org_jacoco_core",
+    rule_name = "java_import",
+    artifact_sha256 = "fcd188c688473fc8dcc0c6caaf355e7b389502243527c33b9597a3ec28791f47",
+    artifact_urls = [
         "https://github.com/bazelbuild/bazel/raw/ad8ea5aed2c97c4dbbe577fb69adbd51746f6a51/third_party/java/jacoco/org.jacoco.core-0.8.11.jar",
     ],
-)
-
-http_archive(
-    name = "bazel_org_jacoco_core_srcjar",
-    downloaded_file_path = "org.jacoco.core-sources.jar",
-    sha256 = "6856d98a837c669f33284df0104130000b12eaf38f04374c6d753eb03c65d93a",
-    urls = [
+    srcjar_sha256 = "6856d98a837c669f33284df0104130000b12eaf38f04374c6d753eb03c65d93a",
+    srcjar_urls = [
         "https://github.com/bazelbuild/bazel/raw/ad8ea5aed2c97c4dbbe577fb69adbd51746f6a51/third_party/java/jacoco/org.jacoco.core-0.8.11-sources.jar",
     ],
 )

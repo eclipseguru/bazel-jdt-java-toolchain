@@ -15,12 +15,6 @@ java_library(
 
 # Bazel's BuildJar
 
-java_import(
-    name = "bazel_org_jacoco_core",
-    jars = ["@bazel_org_jacoco_core_jar//file"],
-    srcjar = "@bazel_org_jacoco_core_srcjar//file",
-)
-
 java_library(
     name = "buildjar",
     srcs = glob(["src/main/buildjar/**/*.java"]),
@@ -41,7 +35,7 @@ java_library(
         "@maven//:org_ow2_asm_asm_util",
     ],
     deps = [
-        ":bazel_org_jacoco_core",
+        "@bazel_org_jacoco_core//jar",
         ":ecj",
         ":work_request_handlers",
         "//compiler/src/main/protobuf:deps_java_proto",
