@@ -15,10 +15,6 @@ build:javac   --javacopt="-Xlint:none -verbose"
 # Short lived workers
 build --strategy=Javac=worker --worker_quit_after_build
 
-# no bzlmod yet
-common --noenable_bzlmod
-
-
 # enable debug output
 build --toolchain_resolution_debug=@@bazel_tools//tools/jdk:
 build --explain=bazel_explain.log

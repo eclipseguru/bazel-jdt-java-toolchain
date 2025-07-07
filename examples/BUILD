@@ -1,10 +1,11 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@bazel_jdt_java_toolchain//jdt:defs.bzl", "default_jdt_toolchain")
+load("@rules_jdt_java_toolchain//jdt:defs.bzl", "default_jdt_toolchain")
 load(
     "@bazel_tools//tools/jdk:default_java_toolchain.bzl",
     "PREBUILT_TOOLCHAIN_CONFIGURATION",
 )
+load("@rules_java//java:java_binary.bzl", "java_binary")
 
 # The simplest example. Compiling a single Java class, with no dependencies.
 java_binary(
@@ -35,7 +36,7 @@ RELEASES = (11, 17, 21)
         name = "my_verbose_jdt_example",
         configuration = PREBUILT_TOOLCHAIN_CONFIGURATION,
         misc = [
-            "-warn:all",  # turn on warning, which should give us an indicator JDT is used,
+            "-warn:all",  # turn on warning, which should give us an indicator JDT is used
         ],
         release = release,
     )

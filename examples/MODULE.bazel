@@ -1,0 +1,44 @@
+"""Examples for Bazel Java Toolchain for Eclipse Java Compiler (ECJ)."""
+
+module(
+    name = "examples",
+    version = "1.0.0",
+)
+
+bazel_dep(name = "rules_jdt_java_toolchain", dev_dependency = True)
+local_path_override(
+    module_name = "rules_jdt_java_toolchain",
+    path = "../",
+)
+
+bazel_dep(name = "rules_java", version = "8.13.0")
+
+bazel_dep(name = "bazel_skylib", version = "1.8.0", dev_dependency = True)
+
+bazel_dep(name = "contrib_rules_jvm", version = "0.29.0", dev_dependency = True)
+
+### Maven dependencies for the Java toolchain
+#
+# re-pin with:
+#    REPIN=1 bazel run @maven//:pin
+#
+# show outdated with:
+#    bazel run @maven//:outdated
+#
+#
+bazel_dep(name = "rules_jvm_external", version = "6.7", dev_dependency = True)
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    artifacts = [
+        "org.junit.jupiter:junit-jupiter-api:5.13.3",
+        "org.junit.jupiter:junit-jupiter-engine:5.13.3",
+        "org.junit.platform:junit-platform-launcher:1.13.3",
+        "org.junit.platform:junit-platform-reporting:1.13.3",
+    ],
+    fail_if_repin_required = True,
+    lock_file = "//:maven_install.json",
+    resolver = "maven",
+    strict_visibility = True,
+)
+use_repo(maven, "maven")
