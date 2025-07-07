@@ -21,7 +21,7 @@ bazel cquery --output starlark --starlark:file $SCRIPT_DIR/toolchains-query-form
 echo "\n"
 echo "\n"
 echo "build something"
-bazel build //compiler:ecj //compiler:buildjar //compiler:bazel_org_jacoco_core //compiler:work_request_handlers //:JdtJavaBuilder
+bazel build //compiler:ecj //compiler:buildjar //compiler:work_request_handlers //:JdtJavaBuilder
 
 echo "\n"
 echo "\n"
