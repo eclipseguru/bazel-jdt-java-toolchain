@@ -1,0 +1,13 @@
+def format(target):
+    toolchain_infos = {k: v for k, v in providers(target).items() if k.endswith('JavaToolchainInfo')}
+    runtime_infos = {k: v for k, v in providers(target).items() if k.endswith('JavaRuntimeInfo')}
+
+    if len(toolchain_infos) == 1:
+        java_toolchain_info = toolchain_infos.values()[0]
+        return '# toolchain_infos for ' + str(target) + '\n' + 'java_toolchain_info_source_version=' + java_toolchain_info.source_version + '\njava_toolchain_info_target_version=' + java_toolchain_info.target_version + '\njava_toolchain_info_java_home=' + java_toolchain_info.java_runtime.java_home
+
+    if len(runtime_infos) == 1:
+        java_runtime_info = runtime_infos.values()[0]
+        return '# runtime_infos for ' + str(target) + '\n' + 'java_runtime_info_java_home=' + java_runtime_info.java_home
+
+    fail("Unable to obtain JavaToolchainInfo or JavaRuntimeInfo.")
