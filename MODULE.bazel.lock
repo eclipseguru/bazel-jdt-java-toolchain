@@ -407,7 +407,7 @@
     "@@rules_pkg+//toolchains/git:git_configure.bzl%experimental_find_system_git_extension": {
       "general": {
         "bzlTransitiveDigest": "e0kcURgANfZOn09j27ioW3sdqfsXxZFsBMLJCF1cE2Y=",
-        "usagesDigest": "HKfa/9gu0OgnhUCq6Fj9vM+nn2a18EFGOgEMaA3Njro=",
+        "usagesDigest": "/wO/QY4nABQdHcidkXxh6Y/FbH0aU7nhPxtx9r1keHw=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
