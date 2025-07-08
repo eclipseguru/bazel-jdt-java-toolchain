@@ -413,7 +413,7 @@ public class BlazeEcjMain {
 	private static String detectWorkingDirPathPrefix(BlazeJavacArguments arguments) throws IOException {
 		// since the JDT compiler is executed from within the sandbox, the absolute path
 		// will be resolved to the working directory
-		// we simple remove the working directory
+		// we simply remove the working directory later to make the output relative again for Bazel
 		String workDir = System.getProperty("user.dir");
 		if (workDir == null)
 			throw new IOException("No working directory returned by JVM for property user.dir!");
@@ -423,6 +423,9 @@ public class BlazeEcjMain {
 		}
 
 		// the following code is only for our own sanity
+		// we want to make sure that the working directory is actually the one we expect
+		// we check the absolute path of the first source file or source directory, which
+		// should be within the detected working directory
 		Optional<Path> first = arguments.sourcePath().stream().findFirst();
 		if (!first.isPresent()) {
 			first = arguments.sourceFiles().stream().findFirst();

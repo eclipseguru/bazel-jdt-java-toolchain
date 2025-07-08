@@ -73,7 +73,7 @@ bazel build //some-java-target:target
 INFO: Analyzed target //some-java-target:target (...).
 INFO: Found 1 target...
 SUBCOMMAND: # //ome-java-target:target [action 'Building some-java-target/libtarget-class.jar ...]
-(cd /private/var/tmp/_bazel_username/hash/execroot/core && \
+(cd /private/var/tmp/_bazel_username/hash/execroot/_main && \
   exec env - \
     LC_CTYPE=en_US.UTF-8 \
     LD_LIBRARY_PATH='' \
@@ -83,8 +83,8 @@ SUBCOMMAND: # //ome-java-target:target [action 'Building some-java-target/libtar
     external/jdt_java_toolchain/builder/export/JdtJavaBuilder_deploy.jar \
     @bazel-out/darwin-fastbuild/bin/some-java-target/libtarget-class.jar-0.params \
     @bazel-out/darwin-fastbuild/bin/some-java-target/libtarget-class.jar-1.params)
-ERROR: /Users/username/app/main/core/some-java-target/BUILD.bazel:4:13: Building some-java-target/libtarget-class.jar ... failed: (Exit 1): java failed: error executing command
-  (cd /private/var/tmp/_bazel_username/hash/execroot/core && \
+ERROR: /Users/username/repo/some-java-target/BUILD.bazel:4:13: Building some-java-target/libtarget-class.jar ... failed: (Exit 1): java failed: error executing command
+  (cd /private/var/tmp/_bazel_username/hash/execroot/_main && \
   exec env - \
     LC_CTYPE=en_US.UTF-8 \
     LD_LIBRARY_PATH='' \
@@ -98,7 +98,7 @@ You can ignore the `exec env` part.
 The interesting two steps are:
 
 ```
-cd /private/var/tmp/_bazel_username/hash/execroot/core
+cd /private/var/tmp/_bazel_username/hash/execroot/_main
 ```
 
 ```
@@ -106,6 +106,10 @@ cd /private/var/tmp/_bazel_username/hash/execroot/core
 ```
 
 The first is the execution directory and the latter the command.
+
+A note about the command. It's executing the compiler jar with Java. The Java executable may come from your system (local toolchain) like in the example (`/Users/username/tools/Darwin/jdk/bin/java`) or from a Bazel remote toolchain in which case the path would be relative (eg., `external/rules_java++toolchains+remotejdk21_macos_aarch64/bin/java`). 
+Either is fine.
+
 You need to `cd` into the execution directory and then run the command yourself.
 But this time add the remote debug arguments (before `-jar`) as follows:
 
