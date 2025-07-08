@@ -106,6 +106,10 @@ cd /private/var/tmp/_bazel_username/hash/execroot/_main
 ```
 
 The first is the execution directory and the latter the command.
+
+A note about the command. It's executing the compiler jar with Java. The Java executable may come from your system (local toolchain) like in the example (`/Users/username/tools/Darwin/jdk/bin/java`) or from a Bazel remote toolchain in which case the path would be relative (eg., `external/rules_java++toolchains+remotejdk21_macos_aarch64/bin/java`). 
+Either is fine.
+
 You need to `cd` into the execution directory and then run the command yourself.
 But this time add the remote debug arguments (before `-jar`) as follows:
 
