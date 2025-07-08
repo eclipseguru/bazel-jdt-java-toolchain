@@ -30,7 +30,7 @@ print_rel_notes(
     artifact_name = "rules_jdt-%s.tar.gz" % _version,
     changelog = ":changelog",
     deps_method = "rules_jdt_dependencies",
-    org = "salesforce",
+    org = "eclipseguru",
     repo = "bazel-jdt-java-toolchain",
     setup_file = "jdt:repositories.bzl",
     toolchains_method = "rules_jdt_toolchains",
