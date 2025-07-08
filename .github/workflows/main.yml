@@ -30,6 +30,10 @@ jobs:
           ~/.cache/bazelisk
         key: bazel
 
+    - name: Check MODULE.bazel.lock file
+      run: |
+        bazelisk mod deps --lockfile_mode=error
+
     - name: Build JdtJavaBuilder_deploy.jar
       run: |
         bazelisk build --config=ci :JdtJavaBuilder_deploy.jar
