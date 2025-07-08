@@ -15,7 +15,7 @@ RELEASES = [
     default_java_toolchain(
         name = "my_verbose_jdt_source_target_example%d" % (release[0]) ,
         configuration = PREBUILT_TOOLCHAIN_CONFIGURATION,
-        javabuilder = ["@rules_jdt_java_toolchain//compiler/export:JdtJavaBuilder"],
+        javabuilder = ["@rules_jdt//compiler/export:JdtJavaBuilder"],
         source_version = "%d" % release[0],
         target_version = "%d" % release[1],
         misc = [

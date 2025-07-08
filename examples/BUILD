@@ -1,6 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@rules_jdt_java_toolchain//jdt:defs.bzl", "default_jdt_toolchain")
+load("@rules_jdt//jdt:defs.bzl", "default_jdt_toolchain")
 load(
     "@bazel_tools//tools/jdk:default_java_toolchain.bzl",
     "PREBUILT_TOOLCHAIN_CONFIGURATION",
