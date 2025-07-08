@@ -1,10 +1,15 @@
 name: Tagged Release
 
 on:
-  # only when a semver tag is pushed
+  # when a semver tag is pushed this runs automatically
   push:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
+  # or when invoked manually a preview release is created
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -12,50 +17,56 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Mount bazel cache
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cache/bazel
           ~/.cache/bazelisk
         key: bazel
 
-    - name: Install bazelisk
-      run: |
-        curl -LO "https://github.com/bazelbuild/bazelisk/releases/download/v1.10.1/bazelisk-linux-amd64"
-        mkdir -p "${GITHUB_WORKSPACE}/bin/"
-        mv bazelisk-linux-amd64 "${GITHUB_WORKSPACE}/bin/bazel"
-        chmod +x "${GITHUB_WORKSPACE}/bin/bazel"
-
     - name: Build JdtJavaBuilder_deploy.jar
       run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" build :JdtJavaBuilder_deploy.jar
+        bazelisk build --config=ci :JdtJavaBuilder_deploy.jar
         cp -fv bazel-bin/JdtJavaBuilder_deploy.jar compiler/export/
 
     - name: Test Compile
       run: |
         cd examples/
-        "${GITHUB_WORKSPACE}/bin/bazel" build //...
+        bazelisk test //...
 
     - name: Build Distribution
       run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" build //dist:all
+        bazelisk build //dist:all
 
     - name: Replace version with tag info
       # more inspiration at https://blog.pusher.com/continuous-releases-github-actions/
+      if: github.ref_type == 'tag'
       run: |
         sed -i "s|/latest/|/${{ github.ref_name }}/|" bazel-bin/dist/relnotes.txt
 
-    - name: Publish Release
-      uses: "softprops/action-gh-release@v1"
+    - name: Publish Draft Release for tag
+      uses: softprops/action-gh-release@v2
+      if: github.ref_type == 'tag'
       with:
-        token: "${{ secrets.GITHUB_TOKEN }}"
         draft: true
-        body_path: "bazel-bin/dist/relnotes.txt"
+        body_path: bazel-bin/dist/relnotes.txt
+        files: |
+          LICENSE
+          bazel-bin/dist/rules_jdt-*.tar.gz
+          bazel-bin/dist/changelog.txt
+
+    - name: Publish Preview Release for main branch
+      uses: softprops/action-gh-release@v2
+      if: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
+      with:
+        tag_name: "${{ github.ref_name }}"
+        preview: true
+        body_path: bazel-bin/dist/relnotes.txt
         files: |
           LICENSE
           bazel-bin/dist/rules_jdt-*.tar.gz

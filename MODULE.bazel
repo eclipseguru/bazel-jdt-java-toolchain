@@ -1,7 +1,7 @@
 """Bazel Java Toolchain for Eclipse Java Compiler (ECJ)."""
 
 module(
-    name = "rules_jdt_java_toolchain",
+    name = "rules_jdt",
     version = "1.4.0", # must match the version in dist/BUILD
 )
 

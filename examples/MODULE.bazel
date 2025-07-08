@@ -5,9 +5,9 @@ module(
     version = "1.0.0",
 )
 
-bazel_dep(name = "rules_jdt_java_toolchain", dev_dependency = True)
+bazel_dep(name = "rules_jdt", dev_dependency = True)
 local_path_override(
-    module_name = "rules_jdt_java_toolchain",
+    module_name = "rules_jdt",
     path = "../",
 )
 
