@@ -64,10 +64,8 @@ jobs:
       uses: softprops/action-gh-release@v2
       if: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
       with:
-        tag_name: "${{ github.ref_name }}"
+        tag_name: "latest"
         prerelease: true
-        body_path: bazel-bin/dist/relnotes.txt
         files: |
           LICENSE
           bazel-bin/dist/rules_jdt-*.tar.gz
-          bazel-bin/dist/changelog.txt

@@ -79,7 +79,7 @@ bazel_dep(name = "rules_pkg", version = "1.1.0", dev_dependency = True)
 git_override(
     module_name = "rules_pkg",
     # git_override to consume parts of https://github.com/bazelbuild/rules_pkg/pull/967
-    commit = "ca7dca8c6c6ae89301bd7706e38bbdaff54b5603",
+    commit = "ecfcb1f2fc708cb339f8136283faa5852392748b",
     remote = "https://github.com/guw/rules_pkg.git",
 )
 
