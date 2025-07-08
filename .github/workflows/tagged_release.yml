@@ -60,12 +60,12 @@ jobs:
           bazel-bin/dist/rules_jdt-*.tar.gz
           bazel-bin/dist/changelog.txt
 
-    - name: Publish Preview Release for main branch
+    - name: Publish Pre-Release for main branch
       uses: softprops/action-gh-release@v2
       if: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
       with:
         tag_name: "${{ github.ref_name }}"
-        preview: true
+        prerelease: true
         body_path: bazel-bin/dist/relnotes.txt
         files: |
           LICENSE
