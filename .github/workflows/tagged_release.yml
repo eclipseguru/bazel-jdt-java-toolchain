@@ -65,8 +65,9 @@ jobs:
       if: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
       with:
         tag_name: "latest"
+        name: "Latest Pre-Release"
         prerelease: true
-        generate_release_notes: true
+        body_path: bazel-bin/dist/relnotes.txt
         files: |
           LICENSE
           bazel-bin/dist/rules_jdt-*.tar.gz
