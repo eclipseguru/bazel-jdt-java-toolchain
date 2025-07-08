@@ -73,7 +73,7 @@ bazel build //some-java-target:target
 INFO: Analyzed target //some-java-target:target (...).
 INFO: Found 1 target...
 SUBCOMMAND: # //ome-java-target:target [action 'Building some-java-target/libtarget-class.jar ...]
-(cd /private/var/tmp/_bazel_username/hash/execroot/core && \
+(cd /private/var/tmp/_bazel_username/hash/execroot/_main && \
   exec env - \
     LC_CTYPE=en_US.UTF-8 \
     LD_LIBRARY_PATH='' \
@@ -83,8 +83,8 @@ SUBCOMMAND: # //ome-java-target:target [action 'Building some-java-target/libtar
     external/jdt_java_toolchain/builder/export/JdtJavaBuilder_deploy.jar \
     @bazel-out/darwin-fastbuild/bin/some-java-target/libtarget-class.jar-0.params \
     @bazel-out/darwin-fastbuild/bin/some-java-target/libtarget-class.jar-1.params)
-ERROR: /Users/username/app/main/core/some-java-target/BUILD.bazel:4:13: Building some-java-target/libtarget-class.jar ... failed: (Exit 1): java failed: error executing command
-  (cd /private/var/tmp/_bazel_username/hash/execroot/core && \
+ERROR: /Users/username/repo/some-java-target/BUILD.bazel:4:13: Building some-java-target/libtarget-class.jar ... failed: (Exit 1): java failed: error executing command
+  (cd /private/var/tmp/_bazel_username/hash/execroot/_main && \
   exec env - \
     LC_CTYPE=en_US.UTF-8 \
     LD_LIBRARY_PATH='' \
@@ -98,7 +98,7 @@ You can ignore the `exec env` part.
 The interesting two steps are:
 
 ```
-cd /private/var/tmp/_bazel_username/hash/execroot/core
+cd /private/var/tmp/_bazel_username/hash/execroot/_main
 ```
 
 ```
