@@ -55,10 +55,10 @@ jobs:
       with:
         draft: true
         body_path: bazel-bin/dist/relnotes.txt
+        generate_release_notes: true
         files: |
           LICENSE
           bazel-bin/dist/rules_jdt-*.tar.gz
-          bazel-bin/dist/changelog.txt
 
     - name: Publish Pre-Release for main branch
       uses: softprops/action-gh-release@v2
@@ -68,6 +68,7 @@ jobs:
         name: "Latest Pre-Release"
         prerelease: true
         body_path: bazel-bin/dist/relnotes.txt
+        generate_release_notes: true
         files: |
           LICENSE
           bazel-bin/dist/rules_jdt-*.tar.gz
